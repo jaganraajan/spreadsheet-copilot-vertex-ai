@@ -76,8 +76,32 @@ Get your Google AI API key from: https://makersuite.google.com/app/apikey
 
 ## Usage
 
-### Running the FastAPI Server
+### Option 1: Using Docker (Recommended)
 
+The easiest way to run both servers:
+
+```bash
+# Make sure GOOGLE_API_KEY is in your .env file
+docker-compose up
+```
+
+This will start both the FastAPI server (port 8000) and Flask UI (port 5000).
+
+### Option 2: Using Convenience Scripts
+
+**Terminal 1 - FastAPI Server:**
+```bash
+./run_api.sh
+```
+
+**Terminal 2 - Flask UI:**
+```bash
+./run_ui.sh
+```
+
+### Option 3: Manual Start
+
+**Terminal 1 - FastAPI Server:**
 ```bash
 # Start the FastAPI server
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
@@ -88,10 +112,7 @@ The API will be available at:
 - Interactive API Docs: http://localhost:8000/docs
 - Alternative API Docs: http://localhost:8000/redoc
 
-### Running the Preview UI
-
-In a separate terminal:
-
+**Terminal 2 - Preview UI:**
 ```bash
 python preview_ui.py
 ```

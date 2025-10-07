@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+    volumes:
+      - ./uploads:/app/uploads
+      - ./samples:/app/samples
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  ui:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - API_BASE_URL=http://api:8000
+    volumes:
+      - ./uploads:/app/uploads
+      - ./templates:/app/templates
+    command: python preview_ui.py
+    depends_on:
+      - api
+
+volumes:
+  uploads:
+  samples:
