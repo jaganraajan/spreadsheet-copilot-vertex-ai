@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Preview {{ filename }} - Spreadsheet Copilot{% endblock %}
+
+{% block content %}
+<div class="row mt-4">
+    <div class="col-md-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item active">{{ filename }}</li>
+            </ol>
+        </nav>
+        
+        <h2>{{ filename }}</h2>
+        
+        <div class="btn-group mb-3" role="group">
+            <a href="/analyze/{{ filename }}" class="btn btn-primary">🤖 Analyze with AI</a>
+            <a href="/diff/{{ filename }}" class="btn btn-info">📊 Diff View</a>
+            <a href="http://localhost:8000/download/{{ filename }}" class="btn btn-secondary">⬇️ Download</a>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">📈 Statistics</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <h6>Rows</h6>
+                        <p class="lead">{{ stats.rows }}</p>
+                    </div>
+                    <div class="col-md-3">
+                        <h6>Columns</h6>
+                        <p class="lead">{{ stats.columns }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Column Names</h6>
+                        <p>{{ stats.column_names | join(', ') }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">🔍 Data Preview (First 10 rows)</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-container">
+                    {{ data_head | safe }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3 mb-5">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">📋 Full Data</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-container">
+                    {{ table | safe }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

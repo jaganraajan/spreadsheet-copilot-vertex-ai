@@ -1,0 +1,11 @@
+EmployeeID,Name,Department,Salary,HireDate,Status
+E001,John Doe,Engineering,95000,2020-03-15,Active
+E002,Jane Smith,Marketing,75000,2019-07-22,Active
+E003,Bob Johnson,Engineering,105000,2018-01-10,Active
+E004,Alice Williams,Sales,68000,2021-05-03,Active
+E005,Charlie Brown,HR,62000,2022-02-14,Active
+E006,Diana Prince,Engineering,98000,2020-11-20,Active
+E007,Ethan Hunt,Sales,71000,2021-08-30,Active
+E008,Fiona Apple,Marketing,78000,2019-12-05,On Leave
+E009,George Michael,Engineering,92000,2020-06-18,Active
+E010,Hannah Montana,HR,65000,2021-10-25,Active
