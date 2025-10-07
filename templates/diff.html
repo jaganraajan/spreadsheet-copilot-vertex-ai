@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Diff View - {{ filename }}{% endblock %}
+
+{% block content %}
+<div class="row mt-4">
+    <div class="col-md-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="/preview/{{ filename }}">{{ filename }}</a></li>
+                <li class="breadcrumb-item active">Diff View</li>
+            </ol>
+        </nav>
+        
+        <h2>📊 Diff View: {{ filename }}</h2>
+        <p class="lead">Compare original data with transformed data</p>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-md-12">
+        <div class="alert alert-info">
+            <h5>🚧 Coming Soon</h5>
+            <p>This feature will show a side-by-side comparison of:</p>
+            <ul>
+                <li>Original spreadsheet data</li>
+                <li>Data after applying recommended transformations</li>
+                <li>Highlighted differences and changes</li>
+            </ul>
+            <p class="mb-0">Currently, the tool stubs don't modify data, so there's no diff to display yet.</p>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3 mb-5">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">📄 Original Data</h5>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">Original spreadsheet will be displayed here</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">✨ Transformed Data</h5>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">Transformed spreadsheet will be displayed here</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-5">
+    <div class="col-md-12">
+        <a href="/preview/{{ filename }}" class="btn btn-secondary">← Back to Preview</a>
+    </div>
+</div>
+{% endblock %}

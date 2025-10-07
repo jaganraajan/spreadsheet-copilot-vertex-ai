@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Analyze {{ filename }} - Spreadsheet Copilot{% endblock %}
+
+{% block content %}
+<div class="row mt-4">
+    <div class="col-md-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="/preview/{{ filename }}">{{ filename }}</a></li>
+                <li class="breadcrumb-item active">Analyze</li>
+            </ol>
+        </nav>
+        
+        <h2>🤖 AI Analysis: {{ filename }}</h2>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Analysis Configuration</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="prompt" class="form-label">Optional Prompt (leave empty for general analysis)</label>
+                        <textarea 
+                            class="form-control" 
+                            id="prompt" 
+                            name="prompt" 
+                            rows="3" 
+                            placeholder="e.g., 'Focus on sales trends' or 'Identify anomalies in the data'"></textarea>
+                        <div class="form-text">
+                            Provide specific instructions for the AI analysis, or leave empty for automatic recommendations.
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        🚀 Run Analysis
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3 mb-5">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">ℹ️ About AI Analysis</h5>
+            </div>
+            <div class="card-body">
+                <p>The AI will analyze your spreadsheet and provide:</p>
+                <ul>
+                    <li><strong>Data Analysis:</strong> Insights about your data patterns, structure, and quality</li>
+                    <li><strong>Recommended Actions:</strong> Specific tool calls with parameters to improve your spreadsheet</li>
+                    <li><strong>Priority Level:</strong> Urgency of recommended actions</li>
+                </ul>
+                
+                <h6 class="mt-3">Available Tools:</h6>
+                <ul>
+                    <li><strong>apply_formula:</strong> Apply calculations and transformations to columns</li>
+                    <li><strong>create_pivot:</strong> Create pivot tables to summarize data</li>
+                    <li><strong>conditional_format:</strong> Apply visual formatting based on conditions</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Spreadsheet Copilot{% endblock %}
+
+{% block content %}
+<div class="row mt-4">
+    <div class="col-md-12">
+        <h1>Spreadsheet Copilot</h1>
+        <p class="lead">AI-powered spreadsheet analysis using Google Gemini</p>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">📁 Upload CSV File</h5>
+            </div>
+            <div class="card-body">
+                <form id="uploadForm" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="csvFile" class="form-label">Choose CSV file</label>
+                        <input type="file" class="form-control" id="csvFile" name="file" accept=".csv" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </form>
+                <div id="uploadStatus" class="mt-3"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">📋 Sample Files</h5>
+            </div>
+            <div class="card-body">
+                <p>Load a sample CSV file to get started quickly:</p>
+                <div id="samplesList"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">📊 Uploaded Files</h5>
+            </div>
+            <div class="card-body">
+                <div id="filesList"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Load files on page load
+    loadFiles();
+    loadSamples();
+
+    // Handle file upload
+    document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData();
+        const fileInput = document.getElementById('csvFile');
+        formData.append('file', fileInput.files[0]);
+
+        const statusDiv = document.getElementById('uploadStatus');
+        statusDiv.innerHTML = '<div class="alert alert-info">Uploading...</div>';
+
+        try {
+            const response = await fetch('http://localhost:8000/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                statusDiv.innerHTML = `<div class="alert alert-success">File uploaded: ${result.filename}</div>`;
+                fileInput.value = '';
+                loadFiles();
+            } else {
+                statusDiv.innerHTML = `<div class="alert alert-danger">Error: ${result.detail}</div>`;
+            }
+        } catch (error) {
+            statusDiv.innerHTML = `<div class="alert alert-danger">Error: ${error.message}</div>`;
+        }
+    });
+
+    async function loadFiles() {
+        try {
+            const response = await fetch('/files');
+            const data = await response.json();
+
+            const filesDiv = document.getElementById('filesList');
+            
+            if (data.files && data.files.length > 0) {
+                filesDiv.innerHTML = '<div class="table-responsive"><table class="table table-hover">' +
+                    '<thead><tr><th>Filename</th><th>Size</th><th>Actions</th></tr></thead><tbody>' +
+                    data.files.map(file => `
+                        <tr>
+                            <td>${file.filename}</td>
+                            <td>${(file.size / 1024).toFixed(2)} KB</td>
+                            <td>
+                                <a href="/preview/${file.filename}" class="btn btn-sm btn-info">Preview</a>
+                                <a href="/analyze/${file.filename}" class="btn btn-sm btn-primary">Analyze</a>
+                            </td>
+                        </tr>
+                    `).join('') +
+                    '</tbody></table></div>';
+            } else {
+                filesDiv.innerHTML = '<p class="text-muted">No files uploaded yet.</p>';
+            }
+        } catch (error) {
+            console.error('Error loading files:', error);
+        }
+    }
+
+    async function loadSamples() {
+        try {
+            const response = await fetch('/samples');
+            const data = await response.json();
+
+            const samplesDiv = document.getElementById('samplesList');
+            
+            if (data.samples && data.samples.length > 0) {
+                samplesDiv.innerHTML = '<div class="list-group">' +
+                    data.samples.map(sample => `
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            ${sample.filename}
+                            <button class="btn btn-sm btn-success" onclick="loadSample('${sample.filename}')">Load</button>
+                        </div>
+                    `).join('') +
+                    '</div>';
+            } else {
+                samplesDiv.innerHTML = '<p class="text-muted">No sample files available.</p>';
+            }
+        } catch (error) {
+            console.error('Error loading samples:', error);
+            document.getElementById('samplesList').innerHTML = '<p class="text-muted">Error loading samples.</p>';
+        }
+    }
+
+    async function loadSample(filename) {
+        try {
+            const formData = new FormData();
+            formData.append('filename', filename);
+
+            const response = await fetch('/load-sample', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            
+            if (response.ok) {
+                alert(`Sample loaded: ${result.filename}`);
+                loadFiles();
+            } else {
+                alert(`Error: ${result.error}`);
+            }
+        } catch (error) {
+            alert(`Error: ${error.message}`);
+        }
+    }
+</script>
+{% endblock %}

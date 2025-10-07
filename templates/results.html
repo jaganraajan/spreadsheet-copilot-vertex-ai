@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}Analysis Results - {{ filename }}{% endblock %}
+
+{% block content %}
+<div class="row mt-4">
+    <div class="col-md-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="/preview/{{ filename }}">{{ filename }}</a></li>
+                <li class="breadcrumb-item active">Results</li>
+            </ol>
+        </nav>
+        
+        <h2>📊 Analysis Results: {{ filename }}</h2>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-md-12">
+        <div class="card priority-{{ action_plan.priority }}">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">🎯 Priority: {{ action_plan.priority | upper }}</h5>
+            </div>
+            <div class="card-body">
+                <h6>Summary</h6>
+                <p class="lead">{{ action_plan.summary }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">📝 Detailed Analysis</h5>
+            </div>
+            <div class="card-body">
+                <p style="white-space: pre-line;">{{ action_plan.analysis }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-md-12">
+        <h4>🛠️ Recommended Actions ({{ action_plan.recommended_actions | length }})</h4>
+    </div>
+</div>
+
+{% for action in action_plan.recommended_actions %}
+<div class="row mt-2">
+    <div class="col-md-12">
+        <div class="card action-card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <span class="badge bg-info">Action {{ loop.index }}</span>
+                    {{ action.tool_name }}
+                </h5>
+            </div>
+            <div class="card-body">
+                <h6>Reasoning:</h6>
+                <p>{{ action.reasoning }}</p>
+                
+                <h6>Parameters:</h6>
+                <pre class="bg-light p-3 rounded"><code>{{ action.parameters | tojson(indent=2) }}</code></pre>
+                
+                <button class="btn btn-sm btn-primary" onclick="executeAction('{{ action.tool_name }}', {{ action.parameters | tojson }})">
+                    ▶️ Execute (Stub)
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% if action_plan.recommended_actions | length == 0 %}
+<div class="row mt-2">
+    <div class="col-md-12">
+        <div class="alert alert-warning">
+            No recommended actions generated. The data may already be well-organized.
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="row mt-3 mb-5">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">📄 Raw JSON Response</h5>
+            </div>
+            <div class="card-body">
+                <pre class="bg-light p-3 rounded" style="max-height: 400px; overflow: auto;"><code>{{ raw_json }}</code></pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-5">
+    <div class="col-md-12">
+        <a href="/preview/{{ filename }}" class="btn btn-secondary">← Back to Preview</a>
+        <a href="/analyze/{{ filename }}" class="btn btn-primary">🔄 Run New Analysis</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    async function executeAction(toolName, parameters) {
+        try {
+            const formData = new FormData();
+            formData.append('tool_name', toolName);
+            formData.append('parameters', JSON.stringify(parameters));
+
+            const response = await fetch('http://localhost:8000/execute-tool', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            alert(`Tool execution result:\n${JSON.stringify(result, null, 2)}`);
+        } catch (error) {
+            alert(`Error: ${error.message}`);
+        }
+    }
+</script>
+{% endblock %}

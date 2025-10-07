@@ -1,0 +1,11 @@
+SKU,ProductName,Category,Quantity,ReorderLevel,UnitPrice,LastRestocked
+SKU001,Widget A,Widgets,150,50,12.99,2024-01-15
+SKU002,Gadget B,Gadgets,25,30,25.50,2024-01-10
+SKU003,Tool C,Tools,80,40,15.75,2024-01-18
+SKU004,Widget D,Widgets,200,50,10.25,2024-01-20
+SKU005,Gadget E,Gadgets,15,30,32.00,2024-01-08
+SKU006,Tool F,Tools,60,40,18.50,2024-01-12
+SKU007,Widget G,Widgets,45,50,14.99,2024-01-05
+SKU008,Gadget H,Gadgets,90,30,28.75,2024-01-22
+SKU009,Tool I,Tools,120,40,22.00,2024-01-17
+SKU010,Widget J,Widgets,35,50,11.50,2024-01-03
